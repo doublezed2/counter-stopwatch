@@ -1,0 +1,361 @@
+<html>
+<head>
+    <style>
+        body {
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .counter {
+            color: #5596ff;
+            font-size: 180px;
+            margin: 20px;
+        }
+
+        .progress-bar {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            background-color: #333;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4caf50;
+            transition: width 0.3s;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 16px;
+        }
+
+        .progress-end-text {
+            cursor: pointer;
+            font-size: 16px;
+            color: #fff;
+            /* Adjusted styling for positioning */
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-weight: bold;
+        }
+
+        .current-progress-text {
+            cursor: pointer;
+            font-size: 16px;
+            color: #4caf50;
+            margin-left: 5px;
+        }
+
+        .button {
+            width: 200px;
+            height: 100px;
+            font-size: 50px;
+            border: none;
+            border-radius: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            opacity: 0.8;
+        }
+
+        .button.increase {
+            background-color: #2066d6;
+            color: #fff;
+        }
+
+        .button.decrease {
+            background-color: #2066d6;
+            color: #fff;
+        }
+
+        .button.reset {
+            width: 100px;
+            height: 50px;
+            font-size: 25px;
+            background-color: gray;
+        }
+
+        .stopwatch {
+            font-size: 180px;
+            margin: 20px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: #222;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #4caf50;
+            width: 50%;
+            color: white;
+        }
+
+        .close {
+            color: #4caf50;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .input-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .btn-container button:hover {
+            opacity: 0.8;
+        }
+
+        .btn-container button.cancel {
+            background-color: #f44336;
+            margin-left: 10px;
+        }
+
+        .btn-container button.cancel:hover {
+            opacity: 0.8;
+        }
+
+        .btn-container button.save {
+            background-color: #4caf50;
+        }
+
+        .btn-container button.save:hover {
+            opacity: 0.8;
+        }
+
+        .btn-container button.close-modal {
+            background-color: #333;
+            margin-left: 10px;
+        }
+
+        .btn-container button.close-modal:hover {
+            opacity: 0.8;
+        }
+
+        .btn-container button.reset-value {
+            background-color: #1f4788;
+            margin-left: 10px;
+        }
+
+        .btn-container button.reset-value:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
+        <div class="progress-text" id="progressText">0%</div>
+        <div class="current-progress-text" id="currentProgressText"></div>
+        <div class="progress-end-text" id="progressEndText" onclick="openModal()">20</div>
+    </div>
+
+    <div class="container">
+        <div class="left">
+            <div class="counter" id="counter">0</div>
+            <button class="button increase" id="increase">+</button>
+            <button class="button decrease" id="decrease">-</button>
+            <br>
+            <button class="button reset" id="reset">Reset</button>
+        </div>
+        <div class="right">
+            <div class="stopwatch" id="stopwatch">0</div>
+            <button class="button start" id="start">Start</button>
+            <button class="button stop" id="stop">Stop</button>
+            <br>
+            <button class="button reset" id="resetStopwatch">Reset</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="myModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="input-container">
+                <label for="newValue">Enter New Value:</label>
+                <input type="number" id="newValue" placeholder="Enter a new value">
+            </div>
+            <div class="btn-container">
+                <button class="save" onclick="saveNewValue()">Save</button>
+                <button class="cancel" onclick="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var counter = document.getElementById("counter");
+        var progressBarFill = document.getElementById("progressBarFill");
+        var progressText = document.getElementById("progressText");
+        var progressEndText = document.getElementById("progressEndText");
+        var increase = document.getElementById("increase");
+        var decrease = document.getElementById("decrease");
+        var reset = document.getElementById("reset");
+        var stopwatch = document.getElementById("stopwatch");
+        var start = document.getElementById("start");
+        var stop = document.getElementById("stop");
+        var resetStopwatchButton = document.getElementById("resetStopwatch");
+
+        var value = parseInt(localStorage.getItem('counterValue')) || 0;
+        var endValue = parseInt(localStorage.getItem('endValue')) || 20;
+
+        counter.innerHTML = value;
+        progressEndText.innerHTML = endValue;
+
+        function updateProgressBar() {
+            var percent = (value / endValue) * 100;
+            progressBarFill.style.width = percent + '%';
+            progressText.innerHTML = percent.toFixed(0) + '%';
+            document.getElementById("currentProgressText").innerHTML = value;
+        }
+
+        function increaseCounter() {
+            value++;
+            counter.innerHTML = value;
+            updateProgressBar();
+            localStorage.setItem('counterValue', value);
+        }
+
+        function decreaseCounter() {
+            value--;
+            counter.innerHTML = value;
+            updateProgressBar();
+            localStorage.setItem('counterValue', value);
+        }
+
+        function resetCounter() {
+            value = 0;
+            counter.innerHTML = value;
+            updateProgressBar();
+            localStorage.setItem('counterValue', value);
+        }
+
+        var time = 0;
+        var interval = null;
+
+        function startStopwatch() {
+            interval = setInterval(function () {
+                time += 1;
+                var minutes = Math.floor(time / 60);
+                var seconds = time % 60;
+                var displayTime = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+                stopwatch.innerHTML = displayTime;
+            }, 1000);
+        }
+
+        function stopStopwatch() {
+            clearInterval(interval);
+        }
+
+        function resetStopwatchFunction() {
+            clearInterval(interval);
+            time = 0;
+            stopwatch.innerHTML = time.toFixed(0);
+            console.info("check");
+        }
+
+        function openModal() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        function saveNewValue() {
+            var newValue = parseInt(document.getElementById('newValue').value);
+            if (!isNaN(newValue)) {
+                endValue = newValue;
+                progressEndText.innerHTML = endValue;
+                updateProgressBar();
+                localStorage.setItem('endValue', endValue);
+                closeModal();
+            } else {
+                alert('Please enter a valid number.');
+            }
+        }
+
+        function resetValue() {
+            endValue = 20;
+            progressEndText.innerHTML = endValue;
+            updateProgressBar();
+            localStorage.setItem('endValue', endValue);
+            closeModal();
+        }
+
+        increase.addEventListener("click", increaseCounter);
+        decrease.addEventListener("click", decreaseCounter);
+        reset.addEventListener("click", resetCounter);
+        start.addEventListener("click", startStopwatch);
+        stop.addEventListener("click", stopStopwatch);
+        resetStopwatchButton.addEventListener("click", resetStopwatchFunction);
+
+        updateProgressBar();
+
+    </script>
+    
+</body>
+</html>
