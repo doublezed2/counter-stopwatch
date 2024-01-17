@@ -103,7 +103,7 @@
             margin: 20px;
             color: #dfdfdf;
         }
-        button#start,button#stop {
+        button#start,button#pause {
             background-color: #dfdfdf;
         }
 
@@ -229,7 +229,7 @@
         <div class="right">
             <div class="stopwatch" id="stopwatch">0</div>
             <button class="button start" id="start">Start</button>
-            <button class="button stop" id="stop">Stop</button>
+            <button class="button pause" id="pause">Pause</button>
             <br>
             <button class="button reset" id="resetStopwatch">Reset</button>
         </div>
@@ -260,7 +260,7 @@
         var reset = document.getElementById("reset");
         var stopwatch = document.getElementById("stopwatch");
         var start = document.getElementById("start");
-        var stop = document.getElementById("stop");
+        var pause = document.getElementById("pause");
         var resetStopwatchButton = document.getElementById("resetStopwatch");
 
         var value = parseInt(localStorage.getItem('counterValue')) || 0;
@@ -310,7 +310,7 @@
             }, 1000);
         }
 
-        function stopStopwatch() {
+        function pauseStopwatch() {
             clearInterval(interval);
         }
 
@@ -354,7 +354,7 @@
         decrease.addEventListener("click", decreaseCounter);
         reset.addEventListener("click", resetCounter);
         start.addEventListener("click", startStopwatch);
-        stop.addEventListener("click", stopStopwatch);
+        pause.addEventListener("click", pauseStopwatch);
         resetStopwatchButton.addEventListener("click", resetStopwatchFunction);
 
         updateProgressBar();
