@@ -303,15 +303,9 @@
         function startStopwatch() {
             interval = setInterval(function () {
                 time += 1;
-                var hours = Math.floor(time / 3600);
-                var remainingSeconds = time % 3600;
-                var minutes = Math.floor(remainingSeconds / 60);
-                var seconds = remainingSeconds % 60;
-
-                var displayTime = (hours < 10 ? "0" : "") + hours + ":" +
-                                (minutes < 10 ? "0" : "") + minutes + ":" +
-                                (seconds < 10 ? "0" : "") + seconds;
-
+                var minutes = Math.floor(time / 60);
+                var seconds = time % 60;
+                var displayTime = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
                 stopwatch.innerHTML = displayTime;
             }, 1000);
         }
